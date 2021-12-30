@@ -1,2 +1,6 @@
-# Khess
-Android Chess app
+
+## Build
+```bash
+$ androidjs b
+```
+

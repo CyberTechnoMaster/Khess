@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Khess Example</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="../assets/bootstrap.min.css">
+  <link rel="stylesheet" href="../assets/chessboard-1.0.0.css">
+  
+  <script type="text/javascript" src="../assets/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" src = "../assets/script.js"></script>
+  <script type="text/javascript" src = "../assets/chess.js"></script>
+  <!-- <script type="text/javascript" src="../assets/jquery-3.3.1.slim.min.js"></script> -->
+
+  <script type="text/javascript" src="../assets/chessboard-1.0.0.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script type="text/javascript" src="../node_modules/androidjs/lib/androidjs.js"></script>
+</head>
+<!-- 
+<style>
+	.app{
+		font-size:30px;
+	}
+</style> -->
+
+<body>
+
+<div class="container h-100 flex-column justify-content-center">
+    
+    <div id="Khoard" style="width: 400px"></div>
+    <label>Status:</label>
+    <div class="width: 100%" id="status"></div>
+    <label>FEN:</label>
+    <div class="width: 100%" id="fen"></div>
+    <label>PGN:</label>
+    <div class="width: 100%" id="pgn"></div>
+    
+    <div class="width: 100% my-auto">
+      <h3 class="display-3" id='msg'>Hello, Khess!</h3>
+    </div>
+ </div>
+
+<script type="text/javascript" src="../assets/popper.min.js"></script>
+<script type="text/javascript" src="../assets/bootstrap.min.js"></script>
+
+<style type="text/css">
+  html, body {
+    height: 100%;
+  }
+
+  .container {
+    padding: 0px;
+  }
+
+  .display-3 {
+    font-size: 2.0rem;
+  }
+
+  .Khoard{
+    background: rgb(211, 186, 186);
+  }
+
+</style>
+<script type="text/javascript">
+  // NOTE: this example uses the chess.js library:
+// https://github.com/jhlywa/chess.js
+
+var board = null
+var game = new Chess()
+var $status = $('#status')
+var $fen = $('#fen')
+var $pgn = $('#pgn')
+
+function onDragStart (source, piece, position, orientation) {
+  // do not pick up pieces if the game is over
+  if (game.game_over()) return false
+
+  // only pick up pieces for the side to move
+  if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+      (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+    return false
+  }
+}
+
+function onDrop (source, target) {
+  // see if the move is legal
+  var move = game.move({
+    from: source,
+    to: target,
+    promotion: 'q' // NOTE: always promote to a queen for example simplicity
+  })
+
+  // illegal move
+  if (move === null) return 'snapback'
+
+  updateStatus()
+}
+
+// update the board position after the piece snap
+// for castling, en passant, pawn promotion
+function onSnapEnd () {
+  board.position(game.fen())
+}
+
+function updateStatus () {
+  var status = ''
+
+  var moveColor = 'White'
+  if (game.turn() === 'b') {
+    moveColor = 'Black'
+  }
+
+  // checkmate?
+  if (game.in_checkmate()) {
+    status = 'Game over, ' + moveColor + ' is in checkmate.'
+  }
+
+  // draw?
+  else if (game.in_draw()) {
+    status = 'Game over, drawn position'
+  }
+
+  // game still on
+  else {
+    status = moveColor + ' to move'
+
+    // check?
+    if (game.in_check()) {
+      status += ', ' + moveColor + ' is in check'
+    }
+  }
+
+  $status.html(status)
+  $fen.html(game.fen())
+  $pgn.html(game.pgn())
+}
+
+var config = {
+  draggable: true,
+  position: 'start',
+  onDragStart: onDragStart,
+  onDrop: onDrop,
+  onSnapEnd: onSnapEnd
+}
+board = Chessboard('Khoard', config)
+
+updateStatus()
+
+
+  
+  
+  // var config = {
+  //   draggable: true,
+  //   position: 'start',
+  //   onDragStart: onDragStart,
+  //   sparePieces: true
+  // } 
+  
+  // function onDragStart (source, piece, position, orientation) {
+  //   console.log('Drag started:')
+  //   console.log('Source: ' + source)
+  //   console.log('Piece: ' + piece)
+  //   console.log('Position: ' + Chessboard.objToFen(position))
+  //   console.log('Orientation: ' + orientation)
+  //   console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+  // }
+  // var board = Chessboard('Khoard', config)
+
+</script>
+</body>
+
+</html>

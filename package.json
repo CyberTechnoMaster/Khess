@@ -1,0 +1,29 @@
+{
+    "version": "1.0.0",
+    "name": "Khess",
+    "app-name": "Khess",
+    "package-name": "webview",
+    "project-type": "webview",
+    "icon": "./assets/icon/icon.png",
+    "dist-path": "./dist",
+    "permission": [
+        "android.permission.INTERNET"
+    ],
+    "description": "",
+    "main": "main.js",
+    "scripts": {
+        "start:dev": "node .",
+        "build": "androidjs build"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@chrisoakman/chessboardjs": "^1.0.0",
+        "androidjs": "^2.0.2",
+        "chess.js": "^0.12.0"
+    },
+    "project-name": "Khess",
+    "theme": {
+        "fullScreen": true
+    }
+}
