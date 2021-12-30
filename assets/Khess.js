@@ -1,94 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Khess Example</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-	<link rel="stylesheet" href="../assets/bootstrap.min.css">
-  <link rel="stylesheet" href="../assets/chessboard-1.0.0.css">
-  
-  <script type="text/javascript" src="../assets/jquery-3.6.0.min.js"></script>
-  <script type="text/javascript" src = "../assets/script.js"></script>
-  <script type="text/javascript" src = "../assets/chess.js"></script>
-  <!-- <script type="text/javascript" src="../assets/jquery-3.3.1.slim.min.js"></script> -->
-
-  <script type="text/javascript" src="../assets/chessboard-1.0.0.min.js"></script>
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	<script type="text/javascript" src="../node_modules/androidjs/lib/androidjs.js"></script>
-  
-  
-</head>
-<!-- 
-<style>
-	.app{
-		font-size:30px;
-	}
-</style> -->
-
-<body>
-
-  <h3 class="board">
-    hello Khess!
-    </h3>
-    <div id="board" class="board"></div>
-    <br>
-    <div class="info">
-        Search depth:
-        <select id="search-depth">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3" selected>3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
-    
-        <br>
-        <span>Positions evaluated: <span id="position-count"></span></span>
-        <br>
-        <span>Time: <span id="time"></span></span>
-        <br>
-        <span>Positions/s: <span id="positions-per-s"></span> </span>
-        <br>
-        <br>
-        <div id="move-history" class="move-history">
-        </div>
-    </div>
-
-<script type="text/javascript" src="../assets/popper.min.js"></script>
-<script type="text/javascript" src="../assets/bootstrap.min.js"></script>
-
-<style type="text/css">
-  html, body {
-    height: 100%;
-    background-color: rgba(255, 228, 196, 0.486);
-  }
-
-  .board {
-    width: 95%;
-    margin: auto;
-    padding: 5px;
-    text-align: center;
-}
-
-.info {
-    width: 95%;
-    margin: auto;
-    font-size: 1rem;
-}
-
-.move-history {
-    max-height: 150px;
-    overflow-y: scroll;
-}
-
-
-
-</style>
-
-
-
-
-<script>
 var board,
     game = new Chess();
 
@@ -96,13 +5,13 @@ var board,
 
 var minimaxRoot =function(depth, game, isMaximisingPlayer) {
 
-    var newGameMoves = game.moves();
+    var newGameMoves = game.ugly_moves();
     var bestMove = -9999;
     var bestMoveFound;
 
     for(var i = 0; i < newGameMoves.length; i++) {
         var newGameMove = newGameMoves[i]
-        game.move(newGameMove);
+        game.ugly_move(newGameMove);
         var value = minimax(depth - 1, game, -10000, 10000, !isMaximisingPlayer);
         game.undo();
         if(value >= bestMove) {
@@ -119,12 +28,12 @@ var minimax = function (depth, game, alpha, beta, isMaximisingPlayer) {
         return -evaluateBoard(game.board());
     }
 
-    var newGameMoves = game.moves();
+    var newGameMoves = game.ugly_moves();
 
     if (isMaximisingPlayer) {
         var bestMove = -9999;
         for (var i = 0; i < newGameMoves.length; i++) {
-            game.move(newGameMoves[i]);
+            game.ugly_move(newGameMoves[i]);
             bestMove = Math.max(bestMove, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
             game.undo();
             alpha = Math.max(alpha, bestMove);
@@ -136,7 +45,7 @@ var minimax = function (depth, game, alpha, beta, isMaximisingPlayer) {
     } else {
         var bestMove = 9999;
         for (var i = 0; i < newGameMoves.length; i++) {
-            game.move(newGameMoves[i]);
+            game.ugly_move(newGameMoves[i]);
             bestMove = Math.min(bestMove, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
             game.undo();
             beta = Math.min(beta, bestMove);
@@ -280,7 +189,7 @@ var onDragStart = function (source, piece, position, orientation) {
 
 var makeBestMove = function () {
     var bestMove = getBestMove(game);
-    game.move(bestMove);
+    game.ugly_move(bestMove);
     board.position(game.fen());
     renderMoveHistory(game.history());
     if (game.game_over()) {
@@ -385,8 +294,3 @@ var cfg = {
     onSnapEnd: onSnapEnd
 };
 board = ChessBoard('board', cfg);
-
-</script>
-</body>
-
-</html>
