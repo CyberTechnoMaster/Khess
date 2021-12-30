@@ -25,13 +25,14 @@
 
 <body>
 
-<div class="container h-100 flex-column justify-content-center">
+<div class="container h-100 ">
     
-    <div id="Khoard" style="width: 400px"></div>
+    <div id="Khoard" style="width: 95%"></div>
     <label>Status:</label>
-    <div class="width: 100%" id="status"></div>
-    <label>FEN:</label>
-    <div class="width: 100%" id="fen"></div>
+    <div class="status" id="status"></div>
+    <br>
+    <label style="display:none">FEN:</label>
+    <div class="fenText" id="fen"></div>
     <label>PGN:</label>
     <div class="width: 100%" id="pgn"></div>
     
@@ -49,15 +50,29 @@
   }
 
   .container {
-    padding: 0px;
+    padding: 5px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .status{
+    font-weight: bold;
   }
 
   .display-3 {
+    text-align: center;
     font-size: 2.0rem;
   }
 
   .Khoard{
     background: rgb(211, 186, 186);
+  }
+
+  .fenText{
+    display: none;
+    font-size: 0.7rem;
+    width: 100%;
   }
 
 </style>
